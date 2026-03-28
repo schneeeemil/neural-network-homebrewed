@@ -21,34 +21,53 @@ public class NeuralNetworkHomebrewed {
         // baue netzwerk
         Network network = new Network(inputWidth, outputWidth, 3, 3);
         
-        // würfle input 
+        int rounds = 100;
+        double[] roundErrors = new double[rounds];
+        
+        for(int r=0; r<rounds; r++) {
+            // würfle input 
+            double[] inputs = prepareInput(inputWidth);
+
+            // determine expectation
+            double[] expectation = determineExpectation(inputs);
+
+            // calculate output
+            double[] output = network.input(inputs);
+
+            // calculate error
+            double[] error = new double[inputWidth];
+            double cumulatedError = 0;
+            for(int i = 0; i<inputWidth; i++){
+                error[i] = expectation[i] - output[i];
+                cumulatedError += Math.abs(expectation[i] - output[i]);
+            }
+            
+            roundErrors[r] = cumulatedError;
+            
+            //@todo... use error for learning
+
+            System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(error));
+        }
+        
+        // System.out.println("min error " + roundErrors.min);
+        // System.out.println("max error " + cumulatedError);
+        // System.out.println("avg error " + cumulatedError);
+        
+
+    }
+    
+    public static double[] prepareInput(int inputWidth){
         double[] inputs = new double[inputWidth];
         Random random = new Random();       
         for(int i = 0; i<inputWidth; i++){
             inputs[i] = random.nextBoolean() ? random.nextDouble() : -1 * random.nextDouble();
         }
-        
-        // determine expectation
-        double[] expected = inputs;
-        Arrays.sort(expected);
-        
-        // gebe input aus
-        System.out.println("in " + Arrays.toString(inputs));
-        
-        // gebe output aus        
-        double[] output = network.input(inputs);
-        System.out.println("out " + Arrays.toString(output));
-        
-        // calculate error
-        double[] error = new double[inputWidth];
-        double cumulatedError = 0;
-        for(int i = 0; i<inputWidth; i++){
-            error[i] = expected[i] - output[i];
-            cumulatedError += Math.abs(expected[i] - output[i]);
-        }
-        System.out.println("err " + Arrays.toString(output));
-       
-        // cumulate error
-        System.out.println("cumulated " + cumulatedError);
+        return inputs;
+    }
+    
+    public static double[] determineExpectation(double[] inputs){
+        double[] result = inputs;
+        Arrays.sort(result);
+        return result;
     }
 }
