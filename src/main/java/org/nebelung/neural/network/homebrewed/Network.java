@@ -18,6 +18,7 @@ public class Network {
         this.networkWidth = networkWidth;
         this.networkDepth = networkDepth;
         layers = new Layer[networkDepth];
+       
         // input layer
         layers[0] = new Layer(inputWidth, networkWidth);
         // intermediate layers
@@ -34,5 +35,12 @@ public class Network {
                 results = layers[i].input(results);
         }
         return results;
+    }
+    
+    public void adjust(double[] errors){
+        double[] errorUp = errors;
+        for(int i=networkDepth-1; i>=0; i--){
+            errorUp = layers[i].adjust(errorUp);
+        }
     }
 }

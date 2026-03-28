@@ -19,7 +19,7 @@ public class NeuralNetworkHomebrewed {
         int outputWidth = 3;
         
         // baue netzwerk
-        Network network = new Network(inputWidth, outputWidth, 3, 3);
+        Network network = new Network(inputWidth, outputWidth, 8, 8);
         
         int rounds = 100;
         double[] roundErrors = new double[rounds];
@@ -35,18 +35,19 @@ public class NeuralNetworkHomebrewed {
             double[] output = network.input(inputs);
 
             // calculate error
-            double[] error = new double[inputWidth];
+            double[] errors = new double[inputWidth];
             double cumulatedError = 0;
             for(int i = 0; i<inputWidth; i++){
-                error[i] = expectation[i] - output[i];
+                errors[i] = expectation[i] - output[i];
                 cumulatedError += Math.abs(expectation[i] - output[i]);
             }
             
             roundErrors[r] = cumulatedError;
             
             //@todo... use error for learning
+            //network.adjust(errors);
 
-            System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(error));
+            System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(errors));
         }
         
         System.out.println("min error " + Arrays.stream(roundErrors).min());

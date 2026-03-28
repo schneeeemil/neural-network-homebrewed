@@ -28,4 +28,15 @@ public class Layer {
         }
         return results;
     }
+    
+    public double[] adjust (double[] errors){
+        double[] adjustments = new double[inputWidth];
+        for(int i = 0; i<layerWidth; i++){
+            double[] neuronErrors = neurons[i].adjust(errors[i]);
+            for (int t =0; t<inputWidth; t++){
+                adjustments[t] += neuronErrors[t];
+            }
+        }
+        return adjustments;
+    }
 }
