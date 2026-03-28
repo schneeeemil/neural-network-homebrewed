@@ -49,9 +49,9 @@ public class NeuralNetworkHomebrewed {
             System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(error));
         }
         
-        // System.out.println("min error " + roundErrors.min);
-        // System.out.println("max error " + cumulatedError);
-        // System.out.println("avg error " + cumulatedError);
+        System.out.println("min error " + Arrays.stream(roundErrors).min());
+        System.out.println("max error " + Arrays.stream(roundErrors).max());
+        System.out.println("avg error " + Arrays.stream(roundErrors).average());
         
 
     }
