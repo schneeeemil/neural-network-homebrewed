@@ -25,7 +25,7 @@ public class Neuron {
         for(int i = 0; i<inputWidth; i++){
             this.weights[i] = random.nextBoolean() ? random.nextDouble() : -1 * random.nextDouble();
         }
-        this.learningRate = 1.0;
+        this.learningRate = 0.1;
     }
     
     public void setWeights(double[] weights){

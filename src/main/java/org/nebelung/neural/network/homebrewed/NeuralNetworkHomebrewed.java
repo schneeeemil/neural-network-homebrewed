@@ -19,24 +19,33 @@ public class NeuralNetworkHomebrewed {
         int outputWidth = 2;
         
         // baue netzwerk
-        Network network = new Network(inputWidth, outputWidth, 8, 8);
+        Network network = new Network(inputWidth, outputWidth, 5, 5);
         
         int rounds = 100;
+        int trainingDataSize = 100;
         double[] roundErrors = new double[rounds];
         
+        double[][] inputCollection = new double[trainingDataSize][inputWidth];
+        double[][] expectationCollection = new double[trainingDataSize][outputWidth];
+        
+        // würfle input
+        for(int i=0; i<trainingDataSize; i++){
+            inputCollection[i] = prepareInput(inputWidth);
+            expectationCollection[i] = determineExpectation(inputCollection[i]);
+        }
+        // determine expectation
+        
+        
         for(int q=0; q<rounds; q++) {
-            for(int r=0; r<rounds; r++) {
-                // würfle input 
-                double[] inputs = prepareInput(inputWidth);
-
-                // determine expectation
-                double[] expectation = determineExpectation(inputs);
-
+            for(int r=0; r<trainingDataSize; r++) {
+                double[] inputs = inputCollection[r];
+                double[] expectation = expectationCollection[r];
+                
                 // calculate output
                 double[] output = network.input(inputs);
 
                 // calculate error
-                double[] errors = new double[inputWidth];
+                double[] errors = new double[outputWidth];
                 double cumulatedError = 0;
                 for(int i = 0; i<outputWidth; i++){
                     double error = output[i] - expectation[i];
