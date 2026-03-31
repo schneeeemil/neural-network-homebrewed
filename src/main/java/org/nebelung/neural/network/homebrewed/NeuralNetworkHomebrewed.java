@@ -16,7 +16,7 @@ public class NeuralNetworkHomebrewed {
 
     public static void main(String[] args) {
         int inputWidth = 3;
-        int outputWidth = 3;
+        int outputWidth = 2;
         
         // baue netzwerk
         Network network = new Network(inputWidth, outputWidth, 8, 8);
@@ -38,8 +38,8 @@ public class NeuralNetworkHomebrewed {
                 // calculate error
                 double[] errors = new double[inputWidth];
                 double cumulatedError = 0;
-                for(int i = 0; i<inputWidth; i++){
-                    double error = expectation[i] - output[i];
+                for(int i = 0; i<outputWidth; i++){
+                    double error = output[i] - expectation[i];
                     errors[i] = error;
                     cumulatedError += Math.abs(error);
                 }
@@ -62,8 +62,22 @@ public class NeuralNetworkHomebrewed {
     }
     
     public static double[] determineExpectation(double[] inputs){
-        double[] result = inputs;
-        Arrays.sort(result);
+        double sum = 0.0;
+        double radius = 0.5;
+        double[] result = new double[2];
+        
+        for (int i=0; i<inputs.length; i++){
+            sum += Math.pow(inputs[i], 2.0);
+        }
+        
+        if(Math.sqrt(sum)<= radius){
+            result[0] = 1.0;
+            result[1] = 0.0;
+        } else {
+            result[0] = 0.0;
+            result[1] = 1.0;
+        }
+        
         return result;
     }
 }
