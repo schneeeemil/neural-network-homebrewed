@@ -28,6 +28,10 @@ public class Neuron {
         this.learningRate = 0.1;
     }
     
+    public void setLearningRate(double learningRate){
+        this.learningRate = learningRate;
+    }
+    
     public void setWeights(double[] weights){
         this.weights = weights;
     }

@@ -59,19 +59,27 @@ public class NeuronTest {
      @Test
      public void neuronsCalculateInputAsExpected() {
          Neuron neuron = new Neuron(3);
-         neuron.setWeights(new double[] {1.0, 2.0, 3.0});
-         double result = neuron.input(new double[] {0.0, 1.0, 2.0});
-         assertEquals(8, result);
+         neuron.setWeights(new double[] {0.2, 0.3, 0.8});
+         double result = neuron.input(new double[] {0.8, 0.3, 0.5});
+         assertEquals(0.6570104626734988, result);       
      }
      
      @Test
      public void neuronsAdjustAsExpected(){
          Neuron neuron = new Neuron(3);
-         neuron.setWeights(new double[] {1.0, 2.0, 3.0});
-         neuron.input(new double[] {0.0, 1.0, 2.0});
-         double[] blame = neuron.adjust(2);
-         double[] weights = neuron.getWeights();
-         assertEquals(new double[] {0.0, 0.0, 0.0}, blame);
-         assertEquals(new double[] {0.0, 0.0, 0.0}, weights);
+         neuron.setLearningRate(1.0);
+         neuron.setWeights(new double[] {0.2, 0.3, 0.8});
+         neuron.input(new double[] {0.8, 0.3, 0.5});
+         
+         double[] blame = neuron.adjust(0.2);         
+         double[] weights = neuron.getWeights();        
+         
+         assertEquals(0.1639443656622314, weights[0]);
+         assertEquals(0.2864791371233368, weights[1]);
+         assertEquals(0.7774652285388947, weights[2]);
+         
+         assertEquals(0.009013908584442154, blame[0]);
+         assertEquals(0.013520862876663231, blame[1]);
+         assertEquals(0.036055634337768615, blame[2]);
      }
 }
