@@ -15,45 +15,52 @@ public class Neuron {
     public double[] weights;
     public double[] lastInputs;
     public double lastOutput;
+    public double learningRate;
     
     
     public Neuron (int inputWidth){
         this.inputWidth = inputWidth;
         Random random = new Random();
-        weights = new double[inputWidth];
+        this.weights = new double[inputWidth];
         for(int i = 0; i<inputWidth; i++){
-            weights[i] = random.nextBoolean() ? random.nextDouble() : -1 * random.nextDouble();
+            this.weights[i] = random.nextBoolean() ? random.nextDouble() : -1 * random.nextDouble();
         }
+        this.learningRate = 1.0;
     }
     
     public void setWeights(double[] weights){
-//        if(weights.length != inputWidth){
-//            throw new Exception("You Failed");
-//        }
         this.weights = weights;
     }
     
     public double[] getWeights(){return weights;}
     
     public double input(double[] inputs){
-        double output = 0;
-        lastInputs = inputs;
-        for(int i = 0; i<inputWidth; i++){
-            output += weights[i] * inputs[i];
+        double sum = 0;
+        this.lastInputs = inputs;
+        for(int i = 0; i<this.inputWidth; i++){
+            sum += this.weights[i] * inputs[i];
         }
-        lastOutput = output;
-        return output;
+        this.lastOutput = sigmoid(sum);
+        return this.lastOutput;
     }
 
     public double[] adjust(double error){
-        double[] activations = new double[inputWidth];
-        double[] blame = new double[inputWidth];
-        for(int i=0; i<inputWidth; i++){
-            activations[i] = lastInputs[i]*weights[i];
-            blame[i] = weights[i] * lastOutput * error;
-            
-            weights[i] += 0.01*error*lastOutput*lastInputs[i];
-        }
+        // derivative of sigmoid(output) = output * (1 - output)
+        double delta = error * sigmoidDerivative(this.lastOutput);        
+        double[] blame = new double[this.inputWidth];
+        for(int i=0; i<this.inputWidth; i++){
+            // error to propagate backward
+            blame[i] = this.weights[i] * delta;            
+            // gradient descent weight update
+            this.weights[i] -= this.learningRate * delta * this.lastInputs[i];        }
         return blame;
+    }
+    
+    private double sigmoid(double x) {
+        return 1.0 / (1.0 + Math.exp(-x));
+    }
+
+    private double sigmoidDerivative(double output) {
+        return output * (1.0 - output);
     }
 }

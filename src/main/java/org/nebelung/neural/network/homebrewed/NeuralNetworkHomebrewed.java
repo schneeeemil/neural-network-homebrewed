@@ -24,37 +24,32 @@ public class NeuralNetworkHomebrewed {
         int rounds = 100;
         double[] roundErrors = new double[rounds];
         
-        for(int r=0; r<rounds; r++) {
-            // würfle input 
-            double[] inputs = prepareInput(inputWidth);
+        for(int q=0; q<rounds; q++) {
+            for(int r=0; r<rounds; r++) {
+                // würfle input 
+                double[] inputs = prepareInput(inputWidth);
 
-            // determine expectation
-            double[] expectation = determineExpectation(inputs);
+                // determine expectation
+                double[] expectation = determineExpectation(inputs);
 
-            // calculate output
-            double[] output = network.input(inputs);
+                // calculate output
+                double[] output = network.input(inputs);
 
-            // calculate error
-            double[] errors = new double[inputWidth];
-            double cumulatedError = 0;
-            for(int i = 0; i<inputWidth; i++){
-                errors[i] = expectation[i] - output[i];
-                cumulatedError += Math.abs(expectation[i] - output[i]);
+                // calculate error
+                double[] errors = new double[inputWidth];
+                double cumulatedError = 0;
+                for(int i = 0; i<inputWidth; i++){
+                    double error = expectation[i] - output[i];
+                    errors[i] = error;
+                    cumulatedError += Math.abs(error);
+                }
+
+                roundErrors[r] = cumulatedError;
+                network.adjust(errors);
             }
-            
-            roundErrors[r] = cumulatedError;
-            
-            //@todo... use error for learning
-            network.adjust(errors);
 
-            System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(errors) + " = " + cumulatedError);
+            System.out.println(Arrays.stream(roundErrors).min() + " : " + Arrays.stream(roundErrors).max() + " : " + Arrays.stream(roundErrors).average());
         }
-        
-        System.out.println("min error " + Arrays.stream(roundErrors).min());
-        System.out.println("max error " + Arrays.stream(roundErrors).max());
-        System.out.println("avg error " + Arrays.stream(roundErrors).average());
-        
-
     }
     
     public static double[] prepareInput(int inputWidth){
