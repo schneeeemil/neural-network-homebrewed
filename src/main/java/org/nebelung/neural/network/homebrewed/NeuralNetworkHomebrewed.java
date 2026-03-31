@@ -45,9 +45,9 @@ public class NeuralNetworkHomebrewed {
             roundErrors[r] = cumulatedError;
             
             //@todo... use error for learning
-            //network.adjust(errors);
+            network.adjust(errors);
 
-            System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(errors));
+            System.out.println(Arrays.toString(inputs) + " -> " + Arrays.toString(output) + " : " + Arrays.toString(errors) + " = " + cumulatedError);
         }
         
         System.out.println("min error " + Arrays.stream(roundErrors).min());

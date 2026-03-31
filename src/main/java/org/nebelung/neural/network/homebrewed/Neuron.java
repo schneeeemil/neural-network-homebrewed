@@ -14,7 +14,7 @@ public class Neuron {
     public int inputWidth;
     public double[] weights;
     public double[] lastInputs;
-    public double lastResult;
+    public double lastOutput;
     
     
     public Neuron (int inputWidth){
@@ -36,13 +36,13 @@ public class Neuron {
     public double[] getWeights(){return weights;}
     
     public double input(double[] inputs){
-        double result = 0;
+        double output = 0;
         lastInputs = inputs;
         for(int i = 0; i<inputWidth; i++){
-            result += weights[i] * inputs[i];
+            output += weights[i] * inputs[i];
         }
-        lastResult = result;
-        return result;
+        lastOutput = output;
+        return output;
     }
 
     public double[] adjust(double error){
@@ -50,9 +50,9 @@ public class Neuron {
         double[] blame = new double[inputWidth];
         for(int i=0; i<inputWidth; i++){
             activations[i] = lastInputs[i]*weights[i];
-            blame[i] = (activations[i]/lastResult) * error;
+            blame[i] = weights[i] * lastOutput * error;
             
-            weights[i] += blame[i]/100;
+            weights[i] += 0.01*error*lastOutput*lastInputs[i];
         }
         return blame;
     }
