@@ -15,14 +15,38 @@ import java.util.Arrays;
 public class NeuralNetworkHomebrewed {
     
     public static void main(String[] args){
-        Neuron neuron = new Neuron(2);
-        
-        
-        
-        
+        singleNeuron();
     }
     
-    public static void mainOld(String[] args) {
+    public static void singleNeuron (){
+        Neuron neuron = new Neuron(2);
+        
+        double[][] data = new double[][] {
+            { 0.5,  0.5,  0.0 },
+            { 0.6,  0.65, 0.0 },
+            { 0.3,  0.75, 1.0 },
+            { 0.35, 0.85, 1.0 },
+            { 0.7,  0.75, 0.0 },
+            { 0.2,  0.95, 1.0 },
+            { 0.6,  0.55, 0.0 },
+            { 0.35, 0.95, 1.0 },
+        };
+        
+        for (int r=0; r<300; r++) {
+            double error = 0;
+            for (double[] line: data) {
+                double output = neuron.input(new double[] {line[0], line[1]});
+                error += output - line[2];
+            }
+            neuron.adjust(error);
+        }
+        double[] weights = neuron.getWeights();
+        double bias = neuron.getBias();
+        
+        System.out.println(weights[0] + " : " + weights[1] + " : " + bias);
+    }
+    
+    public static void wholeNetwork() {
         int inputWidth = 3;
         int outputWidth = 2;
         

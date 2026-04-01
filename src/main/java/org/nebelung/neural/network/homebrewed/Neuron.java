@@ -38,10 +38,18 @@ public class Neuron {
         this.weights = weights;
     }
     
-    public double[] getWeights(){return weights;}
+    public double[] getWeights(){
+        return weights;
+    }
     
-    public void setBias(double bias){this.bias = bias;}
+    public void setBias(double bias){
+        this.bias = bias;
+    }
     
+    public double getBias(){
+        return this.bias;
+    }
+
     public double input(double[] inputs){
         double sum = 0;
         this.lastInputs = inputs;
