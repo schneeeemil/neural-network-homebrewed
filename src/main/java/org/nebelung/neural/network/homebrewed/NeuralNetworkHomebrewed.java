@@ -54,48 +54,58 @@ public class NeuralNetworkHomebrewed {
     }
     
     public static void wholeNetwork() {
-        int inputWidth = 3;
+        int inputWidth = 2;
         int outputWidth = 2;
         
         // baue netzwerk
-        Network network = new Network(inputWidth, new int[] {6,6,6}, outputWidth);
+        Network network = new Network(inputWidth, new int[] {3}, outputWidth);
         
-        int rounds = 100;
-        int trainingDataSize = 20;
+        int rounds = 1000;
         double[] roundErrors = new double[rounds];
         
-        double[][] inputCollection = new double[trainingDataSize][inputWidth];
-        double[][] expectationCollection = new double[trainingDataSize][outputWidth];
-        
-        // würfle input
-        for(int i=0; i<trainingDataSize; i++){
-            inputCollection[i] = prepareInput(inputWidth);
-            expectationCollection[i] = determineExpectation(inputCollection[i]);
-        }
-        // determine expectation
+        double[][] data = new double[][] {
+            {0.2, 0.2, 1, 0},
+            {0.2, 0.8, 1, 0},
+            {0.8, 0.8, 0, 1},
+            {0.8, 0.2, 1, 0},
+            {0.5, 0.5, 0, 1},
+        };
         
         for(int q=0; q<rounds; q++) {
-            for(int r=0; r<trainingDataSize; r++) {
-                double[] inputs = inputCollection[r];
-                double[] expectation = expectationCollection[r];
+            for(double[] line: data) {
+                double[] inputs = new double[] {line[0], line[1]};
+                double[] expectation = new double[] {line[2], line[3]};
                 
                 // calculate output
-                double[] output = network.input(inputs);
+                double[] result = network.input(inputs);
 
                 // calculate error
                 double[] errors = new double[outputWidth];
-                double cumulatedError = 0;
                 for(int i = 0; i<outputWidth; i++){
-                    double error = output[i] - expectation[i];
+                    double error = expectation[i] - result[i];
                     errors[i] = error;
-                    cumulatedError += Math.abs(error);
                 }
-
-                roundErrors[r] = cumulatedError;
                 network.adjust(errors);
             }
+            
+            
+        }
+        
+        for(double[] line: data) {
+            double[] inputs = new double[] {line[0], line[1]};
+            double[] expectation = new double[] {line[2], line[3]};
 
-            System.out.println(Arrays.stream(roundErrors).min() + " : " + Arrays.stream(roundErrors).max() + " : " + Arrays.stream(roundErrors).average());
+            // calculate output
+            double[] result = network.input(inputs);
+
+            // calculate error
+            double[] errors = new double[outputWidth];
+            for(int i = 0; i<outputWidth; i++){
+                double error = expectation[i] - result[i];
+                errors[i] = error;
+            }
+            
+            System.out.println(expectation[0] + " -> " + result[0] + " : " + expectation[1] + " -> " + result[1]);
         }
     }
     
