@@ -9,37 +9,39 @@ package org.nebelung.neural.network.homebrewed;
  * @author emils
  */
 public class Network {
-    public int inputWidth, outputWidth, networkWidth, networkDepth;
+    public int inputWidth, outputWidth;
     public Layer[] layers;
     
-    public Network (int inputWidth, int outputWidth, int networkWidth, int networkDepth){
+    public Network (int inputWidth, int[] hiddenLayerWidths, int outputWidth){
         this.inputWidth = inputWidth;
         this.outputWidth = outputWidth;
-        this.networkWidth = networkWidth;
-        this.networkDepth = networkDepth;
-        layers = new Layer[networkDepth];
-       
-        // input layer
-        layers[0] = new Layer(inputWidth, networkWidth);
-        // intermediate layers
-        for(int i=1; i<(networkDepth - 1); i++){
-            layers[i] = new Layer(networkWidth, networkWidth);
+        
+        layers = new Layer[hiddenLayerWidths.length + 1];
+        
+        int previousLayerWidth = inputWidth;             
+        
+        // input + intermediate layers
+        for(int i=0; i<hiddenLayerWidths.length; i++){
+            int currentLayerWidth = hiddenLayerWidths[i];
+            layers[i] = new Layer(previousLayerWidth, currentLayerWidth);
+            previousLayerWidth = currentLayerWidth;
         }
+        
         // output layer
-        layers[networkDepth - 1] = new Layer(networkWidth, outputWidth);
+        layers[hiddenLayerWidths.length] = new Layer(previousLayerWidth, outputWidth);
     }
     
     public double[] input(double[] inputs){
         double[] results = layers[0].input(inputs);
-        for(int i=1; i<networkDepth; i++){
-                results = layers[i].input(results);
+        for(int i=1; i<layers.length; i++){
+            results = layers[i].input(results);
         }
         return results;
     }
     
     public void adjust(double[] errors){
         double[] errorUp = errors;
-        for(int i=networkDepth-1; i>=0; i--){
+        for(int i=layers.length-1; i>=0; i--){
             errorUp = layers[i].adjust(errorUp);
         }
     }
