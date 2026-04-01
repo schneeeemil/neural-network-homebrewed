@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class NeuralNetworkHomebrewed {
     
     public static void main(String[] args){
-        singleNeuron();
+        wholeNetwork();
     }
     
     public static void singleNeuron (){

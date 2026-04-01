@@ -45,8 +45,8 @@ public class Neuron {
         double[] propagatedErrors = new double[weights.length];
         
         for(int i=0; i<weights.length; i++){
-            weights[i] += learningRate * error * derivative * this.lastInputs[i];
             propagatedErrors[i] = weights[i] * error * derivative;
+            weights[i] += learningRate * error * derivative * this.lastInputs[i];
         }        
         bias += this.learningRate * error * derivative;        
         return propagatedErrors;
