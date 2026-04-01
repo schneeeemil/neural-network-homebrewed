@@ -19,7 +19,7 @@ public class NeuralNetworkHomebrewed {
         int outputWidth = 2;
         
         // baue netzwerk
-        Network network = new Network(inputWidth, outputWidth, 5, 5);
+        Network network = new Network(inputWidth, new int[] {6,6,6}, outputWidth);
         
         int rounds = 100;
         int trainingDataSize = 100;
