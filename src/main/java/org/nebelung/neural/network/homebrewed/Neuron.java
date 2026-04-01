@@ -13,6 +13,7 @@ import java.util.Random;
 public class Neuron {
     public int inputWidth;
     public double[] weights;
+    public double bias;
     public double[] lastInputs;
     public double lastOutput;
     public double learningRate;
@@ -25,7 +26,8 @@ public class Neuron {
         for(int i = 0; i<inputWidth; i++){
             this.weights[i] = random.nextBoolean() ? random.nextDouble() : -1 * random.nextDouble();
         }
-        this.learningRate = 0.1;
+        this.bias = 0.0;
+        this.learningRate = 2;
     }
     
     public void setLearningRate(double learningRate){
@@ -38,13 +40,15 @@ public class Neuron {
     
     public double[] getWeights(){return weights;}
     
+    public void setBias(double bias){this.bias = bias;}
+    
     public double input(double[] inputs){
         double sum = 0;
         this.lastInputs = inputs;
         for(int i = 0; i<this.inputWidth; i++){
             sum += this.weights[i] * inputs[i];
         }
-        this.lastOutput = sigmoid(sum);
+        this.lastOutput = sigmoid(sum-this.bias);
         return this.lastOutput;
     }
 
@@ -52,11 +56,16 @@ public class Neuron {
         // derivative of sigmoid(output) = output * (1 - output)
         double delta = error * sigmoidDerivative(this.lastOutput);        
         double[] blame = new double[this.inputWidth];
+        
         for(int i=0; i<this.inputWidth; i++){
             // error to propagate backward
             blame[i] = this.weights[i] * delta;            
             // gradient descent weight update
-            this.weights[i] -= this.learningRate * delta * this.lastInputs[i];        }
+            this.weights[i] -= this.learningRate * delta * this.lastInputs[i];        
+        }
+        
+        this.bias -= delta * this.learningRate;
+        
         return blame;
     }
     

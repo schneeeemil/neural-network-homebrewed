@@ -13,8 +13,16 @@ import java.util.Arrays;
  */
 
 public class NeuralNetworkHomebrewed {
-
-    public static void main(String[] args) {
+    
+    public static void main(String[] args){
+        Neuron neuron = new Neuron(2);
+        
+        
+        
+        
+    }
+    
+    public static void mainOld(String[] args) {
         int inputWidth = 3;
         int outputWidth = 2;
         
