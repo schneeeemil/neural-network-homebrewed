@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class NeuralNetworkHomebrewed {
     
     public static void main(String[] args){
-        singleNeuron();
+        wholeNetwork();
     }
     
     public static void singleNeuron (){
@@ -32,16 +32,23 @@ public class NeuralNetworkHomebrewed {
             { 0.35, 0.95, 1.0 },
         };
         
-        for (int r=0; r<300; r++) {
+        for (int r=0; r<5000; r++) {
             double error = 0;
             for (double[] line: data) {
                 double output = neuron.input(new double[] {line[0], line[1]});
-                error += output - line[2];
+                error = line[2] - output;
+                neuron.adjust(error);
             }
-            neuron.adjust(error);
         }
         double[] weights = neuron.getWeights();
         double bias = neuron.getBias();
+        
+        for (double[] line: data) {
+                double output = neuron.input(new double[] {line[0], line[1]});
+                double error = output - line[2];
+                
+                System.out.println(line[0] + " : " + line[1] + " : " + line[2] +" --> " + output + " / " + error);
+            }
         
         System.out.println(weights[0] + " : " + weights[1] + " : " + bias);
     }
@@ -54,7 +61,7 @@ public class NeuralNetworkHomebrewed {
         Network network = new Network(inputWidth, new int[] {6,6,6}, outputWidth);
         
         int rounds = 100;
-        int trainingDataSize = 100;
+        int trainingDataSize = 20;
         double[] roundErrors = new double[rounds];
         
         double[][] inputCollection = new double[trainingDataSize][inputWidth];
