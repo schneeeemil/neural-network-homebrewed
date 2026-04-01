@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class NeuralNetworkHomebrewed {
     
     public static void main(String[] args){
-        wholeNetwork();
+        singleNeuron();
     }
     
     public static void singleNeuron (){
@@ -33,23 +33,23 @@ public class NeuralNetworkHomebrewed {
         };
         
         for (int r=0; r<5000; r++) {
-            double error = 0;
             for (double[] line: data) {
-                double output = neuron.input(new double[] {line[0], line[1]});
-                error = line[2] - output;
+                double result = neuron.input(new double[] {line[0], line[1]});
+                double error = line[2] - result;
                 neuron.adjust(error);
             }
         }
+
+        // show how the traing data is processed eventually
+        for (double[] line: data) {
+            double output = neuron.input(new double[] {line[0], line[1]});
+            double error = output - line[2];
+            System.out.println(line[0] + " : " + line[1] + " : " + line[2] +" --> " + output + " / " + error);
+        }      
+        
+        // show final state of neuron
         double[] weights = neuron.getWeights();
         double bias = neuron.getBias();
-        
-        for (double[] line: data) {
-                double output = neuron.input(new double[] {line[0], line[1]});
-                double error = output - line[2];
-                
-                System.out.println(line[0] + " : " + line[1] + " : " + line[2] +" --> " + output + " / " + error);
-            }
-        
         System.out.println(weights[0] + " : " + weights[1] + " : " + bias);
     }
     
@@ -73,7 +73,6 @@ public class NeuralNetworkHomebrewed {
             expectationCollection[i] = determineExpectation(inputCollection[i]);
         }
         // determine expectation
-        
         
         for(int q=0; q<rounds; q++) {
             for(int r=0; r<trainingDataSize; r++) {
