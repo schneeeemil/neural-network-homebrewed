@@ -7,53 +7,43 @@ title: Neural Network Architecture
 classDiagram
 
   class Network {
-     + int inputWidth
-     + int outputWidth
-     + int networkWidth
-     + int networkDepth
-     + Layer[] layers
-     + create(int inputWidth, int outputWidth, int networkWidth, int networkDepth) self
+     + inputWidth: int 
+     + outputWidth: int 
+     + layers: Layer[]
 
-     + float[] inputs
-     + float[] outputs
-     + setInputs(float[]) void
-     + getOutputs() float[]
-
-     + float[] errors 
-     + setErrors(float[]) void
+     + Network(int inputWidth, int[] hiddenLayerWidths, int outputWidth)
+     + input(inputs: double[]) double[]
+     + adjust(errors: double[]) void
   }
 
   class Layer {
-     + int inputWidth
-     + int layerWidth     
-     + Neuron[] neurons
-     + create(int inputWidth, int layerWidth) self
+     + inputWidth: int 
+     + layerWidth: int     
+     + neurons: Neuron[]
      
-     + float[] inputs
-     + float[] outputs
-     + setInputs(float[]) void
-     + getOutputs() float[]
-     
-     + float[] errors
-     + float[] upstreamErrors 
-     + setErrors(float[]) void
-     + getUpstreamErrors() float[]
+     + Layer(inputWidth: int, layerWidth: int)
+     + input(inputs: double[]) double[]
+     + adjust(errors: double[]) double[]
   }
 
   class Neuron {
-     + int dimension
-     + float[] weights
-     + create(int dimension, float[] weights) self
+     + weights: double[]
+     + bias: double
+     + learningRate: double
+     + inputWidth: double
+     + lastInputs: double[]
+     + lastOutput: double
 
-     + float[] inputs
-     + float output
-     + setInputs(float[]) void
-     + getOutput() float  
-     
-     + float error
-     + float[] upstreamErrors
-     + setError(float error) void
-     + getUpstreamErrors() float[]
+     + Neuron(inputWidth: int)
+     + input(inputs: double[]) double
+     + adjust(error: double) double[]
+     + sigmoid(x: double) double
+     + sigmoidDerivative(x: double) double
+     + setLearningRate(learningRate: double) void
+     + setWeights(weights: double[]) void
+     + getWeights() double[]
+     + setBias(bias: double) void
+     + getBias() double
   }
 
   Network --* Layer : layers
